@@ -1,15 +1,12 @@
 <?php
 
+use App\Http\Controllers\AgeController;
+use App\Http\Middleware\CheckAge;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\HomeController;
-
-// Route for home page with age restriction using CheckAge middleware
-Route::get('/home', function () {
-    return view('home');
-})->middleware('checkAge:18')->name('home');
 
 // About and Contact routes
 Route::get('/about', function () {
@@ -20,9 +17,26 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
-// HomeController for index
+Route::get('/ageverification', function () {
+    return view('ageverification');
+})->name('ageverification');
+
+// Route group applying the CheckAge middleware
+Route::middleware(['check.age:21'])->group(function () {
+    Route::get('/home', function () {
+        return view('home'); 
+    })->name('home');
+});
+
+Route::middleware(['log.requests'])->group(function () {
+    Route::get('/', function () {
+        return view('ageverification');
+    })->name('ageverification');
+});
+
+    // HomeController for index
 Route::get('/', [HomeController::class, 'index'])->name('home');
-// Route for adding items to the order
+    // Route for adding items to the order
 Route::post('/order/add', [OrderController::class, 'add'])->name('order.add');
 
 // Contact submission
@@ -34,12 +48,20 @@ Route::post('/order/place', [OrderController::class, 'placeOrder'])->name('order
 // Cancel an order
 Route::post('/order/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
 
-// A restricted route that requires users to be 21 or older
-Route::get('/restricted', function () {
-    return "This page is restricted to 21+ users!";
-})->middleware('checkAge:21')->name('restricted');
+// Route for checking age (form submission)
+Route::get('/check-age', function (Request $request) {
+    $age = $request->query('age'); // Get age from query parameter
 
-// Access Denied page
+    // Redirect to the welcome route with the age
+    return redirect()->route('welcome', ['age' => $age]);
+})->name('check.age');
+
+// The welcome route with CheckAge middleware applied
+Route::middleware(['check.age'])->get('/welcome', function (Request $request) {
+    return view('welcome', ['age' => $request->query('age')]); // Pass the age to the view
+})->name('welcome');
+
+// Access Denied route
 Route::get('/access-denied', function () {
-    return "Access Denied!";
+    return view('access-denied'); // Corrected view name
 })->name('access.denied');

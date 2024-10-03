@@ -8,5 +8,8 @@
 <body>
     <h1>Access Denied</h1>
     <p>You must be at least 18 years old to order.</p>
+    <a href="{{ route('ageverification') }}">
+        <button>Verify Age Again</button>
+    </a>
 </body>
 </html>

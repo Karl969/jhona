@@ -7,7 +7,10 @@
     <div class="container">
         <h1>Welcome to Mac and Gab</h1>
         <p>We are happy to fulfill your cravings</p>
-    </div>
+        <a href="{{ route('ageverification') }}">
+        <button>Verify Age</button>
+    </a>
+    </div>  
 </div>
 
 <!-- Messages Section -->
@@ -20,15 +23,6 @@
 @if(session('order_canceled'))
     <div class="alert alert-info">{{ session('order_canceled') }}</div>
 @endif
-
-<!-- Age Check Form -->
-<form action="{{ route('home') }}" method="GET">
-    <div class="mb-3">
-        <label for="age" class="form-label">Enter your age:</label>
-        <input type="number" name="age" id="age" class="form-control" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
 
 <!-- Categories and Menu Items -->
 <div class="container">
@@ -162,6 +156,11 @@
             alert.innerText = "{{ session('order_placed') }}";
             document.querySelector('.container').prepend(alert);
         @endif
+
+        $(document).ready(function() {
+        $('#ageModal').modal('show'); // Show the modal when the page loads
     });
+    });
+
 </script>
 @endpush

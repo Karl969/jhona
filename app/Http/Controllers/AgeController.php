@@ -23,6 +23,6 @@ class AgeController extends Controller
         Session::put('age', $request->age);
 
         // Redirect to the home page after successful age verification
-        return redirect('/home'); // Assuming you have a home route
+        return redirect('/home'); 
     }
 }

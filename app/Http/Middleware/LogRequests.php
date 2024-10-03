@@ -17,14 +17,8 @@ class LogRequests
      */
     public function handle(Request $request, Closure $next)
     {
-        $logData = [
-            'url' => $request->fullUrl(),
-            'method' => $request->method(),
-            'timestamp' => now()->toDateTimeString()
-        ];
-
-        Log::channel('custom')->info('Request Details:', $logData);
-
+        $logData = '[' . now() . '] ' . $request->method() . '  ' . $request->fullUrl();
+        Log::channel('custom')->info($logData);
         return $next($request);
     }
 }

@@ -11,7 +11,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        app('router')->aliasMiddleware('check.age', \App\Http\Middleware\CheckAge::class);
+        app('router')->aliasMiddleware('LogRequest', \App\Http\Middleware\LogRequests::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

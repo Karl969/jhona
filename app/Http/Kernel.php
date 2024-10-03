@@ -8,7 +8,7 @@ class Kernel extends HttpKernel
 {
     protected $routeMiddleware = [
         // ...
-        'checkAge' => \App\Http\Middleware\CheckAge::class,
+        'CheckAge' => \App\Http\Middleware\CheckAge::class,
     ];
     protected $middlewareGroups = [
         'web' => [

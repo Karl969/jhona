@@ -12,16 +12,24 @@ class CheckAge
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  int  $age
+     * @param  int  $minAge
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, $age = 18)
-    {
-        // Assuming age is provided as a query parameter (modify according to how you get the user's age)
-        if ($request->input('age') < $age) {
-            return redirect('access-denied');
-        }
-
-        return $next($request);
-    }
-}
+   
+     public function handle(Request $request, Closure $next, $minAge = 18)
+     {
+         $age = $request->query('age'); 
+ 
+         // If the age is less than the minimum age, redirect to access denied
+         if ($age < $minAge) {
+             return redirect('/access-denied');
+         }
+         
+         // If the age is 18 or older, let the request continue to home page
+         if ($age < 21) {
+            return redirect('/');
+         }
+         // If age is 21 or older contineu to home page
+         return redirect('/');
+     }
+ }
