@@ -50,14 +50,8 @@ return [
     |
     */
     'channels' => [
-        // other channels...
-    
-        'custom' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/log.txt'),
-            'level' => 'info',
-        ],
-    ],
+    // Other channels...
+],
 
     'channels' => [
 
@@ -66,7 +60,6 @@ return [
             'channels' => explode(',', env('LOG_STACK', 'single')),
             'ignore_exceptions' => false,
         ],
-
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
@@ -80,6 +73,12 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => env('LOG_DAILY_DAYS', 14),
             'replace_placeholders' => true,
+        ],
+
+        'custom' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/log.txt'),
+            'level' => 'info',
         ],
 
         'slack' => [

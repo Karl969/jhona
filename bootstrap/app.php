@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         app('router')->aliasMiddleware('check.age', \App\Http\Middleware\CheckAge::class);
-        app('router')->aliasMiddleware('LogRequest', \App\Http\Middleware\LogRequests::class);
+        app('router')->aliasMiddleware('log.requests', \App\Http\Middleware\LogRequests::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgeController;
 use App\Http\Middleware\CheckAge;
+use App\Http\Middleware\LogRequests;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ContactController;
@@ -9,30 +10,29 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\HomeController;
 
 // About and Contact routes
-Route::get('/about', function () {
-    return view('about');
-})->name('about');
-
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
-
-Route::get('/ageverification', function () {
-    return view('ageverification');
-})->name('ageverification');
-
-// Route group applying the CheckAge middleware
-Route::middleware(['check.age:21'])->group(function () {
-    Route::get('/home', function () {
-        return view('home'); 
-    })->name('home');
-});
 
 Route::middleware(['log.requests'])->group(function () {
     Route::get('/', function () {
         return view('ageverification');
     })->name('ageverification');
-});
+
+    Route::get('/home', function () {
+        $age = session('age', 0); // Retrieve age for logging/debugging
+        \Log::info("Age: $age");
+        return view('home');
+    })->middleware(CheckAge::class)->name('home');
+
+    Route::get('/about', function () {
+        return view('about');
+    })->name('about');
+
+    Route::get('/contact', function () {
+        return view('contact');
+    })->name('contact');
+
+    Route::get('/ageverification', function () {
+        return view('ageverification');
+    })->name('ageverification');
 
     // HomeController for index
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -65,3 +65,5 @@ Route::middleware(['check.age'])->get('/welcome', function (Request $request) {
 Route::get('/access-denied', function () {
     return view('access-denied'); // Corrected view name
 })->name('access.denied');
+
+});
